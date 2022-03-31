@@ -1,0 +1,7 @@
+**/__mocks__/**
+**/__tests__/**
+coverage
+src
+tsconfig.json
+tsconfig.tsbuildinfo
+jest.config.js

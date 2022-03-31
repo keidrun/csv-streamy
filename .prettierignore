@@ -1,15 +1,7 @@
 /node_modules
 /coverage
 
-/.husky/*
-!/.husky/pre-commit
-
 /packages/*/node_modules
 /packages/*/dist/
 /packages/*/build/
 /packages/*/coverage/
-/packages/*/package-lock.json
-
-npm-debug.log*
-*.tsbuildinfo
-.eslintcache

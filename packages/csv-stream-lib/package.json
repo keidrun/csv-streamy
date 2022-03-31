@@ -1,0 +1,28 @@
+{
+  "name": "@csv-stream/lib",
+  "version": "0.0.0",
+  "description": "Csv Stream Library for Node.js.",
+  "keywords": [
+    "csv",
+    "stream"
+  ],
+  "type": "module",
+  "exports": "./build/index.js",
+  "scripts": {
+    "start": "node --loader ts-node/esm src/index.ts",
+    "build": "tsc",
+    "watch": "jest --watch --coverage",
+    "test": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keidrun/csv-stream.git",
+    "directory": "packages/csv-stream-lib"
+  },
+  "author": "keidrun",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/keidrun/csv-stream/issues"
+  },
+  "homepage": "https://github.com/keidrun/csv-stream#readme"
+}

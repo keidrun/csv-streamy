@@ -32,7 +32,8 @@
     "prepare": "is-ci || husky install",
     "lint": "eslint . --cache --fix --ext js,ts",
     "format": "prettier --write '**/*.{js,ts,json}'",
-    "test": "jest --coverage --passWithNoTests",
+    "test-clear": "jest --clearCache",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage --passWithNoTests",
     "build-clean": "rimraf ./packages/*/build",
     "build": "npm run build -ws"
   },

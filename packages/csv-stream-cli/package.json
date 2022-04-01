@@ -12,8 +12,9 @@
   "scripts": {
     "start": "node --loader ts-node/esm src/index.ts",
     "build": "tsc",
-    "watch": "jest --watch --coverage",
-    "test": "jest --coverage"
+    "watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch --coverage",
+    "test-clear": "jest --clearCache",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage"
   },
   "repository": {
     "type": "git",

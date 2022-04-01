@@ -6,6 +6,9 @@
 /packages/*/build/
 /packages/*/coverage/
 
+.eslintrc.js
 .eslintrc.cjs
 jest.config.js
+jest.config.cjs
+commitlint.config.js
 commitlint.config.cjs

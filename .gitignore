@@ -3,6 +3,7 @@
 
 /.husky/*
 !/.husky/pre-commit
+!/.husky/commit-msg
 
 /packages/*/node_modules
 /packages/*/dist/

@@ -1,5 +1,6 @@
 // https://kulshekhar.github.io/ts-jest/docs/guides/esm-support
 export default {
+  displayName: 'cli',
   preset: 'ts-jest/presets/default-esm',
   globals: {
     'ts-jest': {

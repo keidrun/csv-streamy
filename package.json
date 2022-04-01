@@ -4,14 +4,18 @@
   "workspaces": [
     "packages/*"
   ],
+  "type": "module",
   "author": "keidrun",
   "license": "MIT",
   "devDependencies": {
+    "@commitlint/cli": "^16.2.3",
+    "@commitlint/config-conventional": "^16.2.1",
     "@tsconfig/node16-strictest-esm": "^1.0.0",
     "@types/jest": "^27.4.1",
     "@types/node": "^16.11.26",
     "@typescript-eslint/eslint-plugin": "^5.17.0",
     "@typescript-eslint/parser": "^5.17.0",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.12.0",
     "eslint-config-prettier": "^8.5.0",
     "husky": "^7.0.4",
@@ -28,18 +32,24 @@
     "prepare": "is-ci || husky install",
     "lint": "eslint . --cache --fix --ext js,ts",
     "format": "prettier --write '**/*.{js,ts,json}'",
-    "test": "npm run test -ws",
+    "test": "jest --coverage --passWithNoTests",
     "build-clean": "rimraf ./packages/*/build",
     "build": "npm run build -ws"
   },
   "lint-staged": {
     "*.{js,ts}": [
       "npm run lint",
-      "npm run format"
+      "npm run format",
+      "npm run test"
     ]
   },
   "engines": {
     "node": ">=16.0.0"
   },
-  "packageManager": "npm@8.5.0"
+  "packageManager": "npm@8.5.0",
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  }
 }

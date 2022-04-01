@@ -1,4 +1,4 @@
-// https://typescript-eslint.io/docs/linting/monorepo
+// Changed this file extension from `.js` to `.cjs` bacause eslint threw `ERR_REQUIRE_ESM` error when `package.json` enabled ESM.
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',

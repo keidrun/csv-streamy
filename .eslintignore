@@ -6,5 +6,6 @@
 /packages/*/build/
 /packages/*/coverage/
 
-.eslintrc.js
-prettier.config.js
+.eslintrc.cjs
+jest.config.js
+commitlint.config.cjs

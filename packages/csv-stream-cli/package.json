@@ -16,6 +16,11 @@
     "test-clear": "jest --clearCache",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage"
   },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/keidrun/csv-stream.git",

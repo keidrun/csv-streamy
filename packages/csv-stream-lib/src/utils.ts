@@ -62,3 +62,55 @@ export function splitByNewline(data: string, options?: { hasDoubleQuotes: boolea
 
   return lines
 }
+
+export function splitByComma(line: string, options?: { hasDoubleQuotes: boolean }): string[] {
+  const hasDoubleQuotes = options?.hasDoubleQuotes || false
+
+  if (!hasDoubleQuotes) return line.trimStart().split(',')
+
+  const hasEndOfItem = (item: string): boolean => {
+    if (item.length <= 3) return false
+
+    if (!escapeCharsInCsv.includes(item.slice(-3, -2)) && item.slice(-2, -1) === '"' && item.slice(-1) === ',') {
+      return true
+    } else if (item.slice(-2, -1) === '"' && item.slice(-1) === ',') {
+      const reversed = item.slice(0, -2).split('').reverse().join('')
+      let escapeCount = 0
+      for (const char of reversed) {
+        if (escapeCharsInCsv.includes(char)) escapeCount++
+        break
+      }
+      if (escapeCount % 2 !== 0) {
+        return true
+      }
+    }
+
+    return false
+  }
+
+  const items = []
+  let item = ''
+  for (const char of line.trimStart()) {
+    if (item.length <= 3) {
+      item += char
+      continue
+    }
+    if (hasEndOfItem(item)) {
+      if (item.slice(0, 1) !== '"' || item.slice(-2, -1) !== '"') {
+        throw new Error('Invalid csv format. Every item must be given in double quotes.')
+      }
+
+      items.push(item.slice(1, -2))
+      item = ''
+    }
+
+    item += char
+  }
+
+  if (item.slice(0, 1) !== '"' || item.slice(-1) !== '"') {
+    throw new Error('Invalid csv format. Every item must be given in double quotes.')
+  }
+  items.push(item.slice(1, -1))
+
+  return items
+}

@@ -1,14 +1,10 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-type ImportMeta = {
-  url: string
-}
-
-export function filename(importMeta: ImportMeta): string {
+export function filename(importMeta: { url: string }): string {
   return fileURLToPath(importMeta.url)
 }
 
-export function dirname(importMeta: ImportMeta): string {
+export function dirname(importMeta: { url: string }): string {
   return path.dirname(filename(importMeta))
 }

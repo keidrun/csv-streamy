@@ -1,5 +1,6 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { InvalidCsvFormatError } from './errors/InvalidCsvFormatError.js'
 
 export function filename(importMeta: { url: string }): string {
   return fileURLToPath(importMeta.url)
@@ -28,9 +29,7 @@ export function splitByNewline(data: string, options?: { hasDoubleQuotes: boolea
         if (escapeCharsInCsv.includes(char)) escapeCount++
         break
       }
-      if (escapeCount % 2 !== 0) {
-        return true
-      }
+      if (escapeCount % 2 !== 0) return true
     }
 
     return false
@@ -80,9 +79,7 @@ export function splitByComma(line: string, options?: { hasDoubleQuotes: boolean 
         if (escapeCharsInCsv.includes(char)) escapeCount++
         break
       }
-      if (escapeCount % 2 !== 0) {
-        return true
-      }
+      if (escapeCount % 2 !== 0) return true
     }
 
     return false
@@ -97,7 +94,7 @@ export function splitByComma(line: string, options?: { hasDoubleQuotes: boolean 
     }
     if (hasEndOfItem(item)) {
       if (item.slice(0, 1) !== '"' || item.slice(-2, -1) !== '"') {
-        throw new Error('Invalid csv format. Every item must be given in double quotes.')
+        throw new InvalidCsvFormatError(`Every item must be given in double quotes. item: ${item}`)
       }
 
       items.push(item.slice(1, -2))
@@ -108,7 +105,7 @@ export function splitByComma(line: string, options?: { hasDoubleQuotes: boolean 
   }
 
   if (item.slice(0, 1) !== '"' || item.slice(-1) !== '"') {
-    throw new Error('Invalid csv format. Every item must be given in double quotes.')
+    throw new InvalidCsvFormatError(`Every item must be given in double quotes. item: ${item}`)
   }
   items.push(item.slice(1, -1))
 

@@ -5,3 +5,5 @@
 /packages/*/dist/
 /packages/*/build/
 /packages/*/coverage/
+
+*.md

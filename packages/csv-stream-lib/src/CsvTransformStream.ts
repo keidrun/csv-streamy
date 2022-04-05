@@ -15,7 +15,7 @@ export type ConverterOptions = {
 
 export enum Event {
   Current = 'current',
-  End = 'end',
+  Total = 'total',
 }
 
 export interface CsvTransformOptions<T> extends TransformOptions {
@@ -92,14 +92,14 @@ export class CsvTransformStream<T> extends Transform {
         this.buffer = Buffer.alloc(0)
 
         if (lastLine === '') {
-          this._emitEndEvent()
+          this._emitTotalEvent()
           callback()
           return
         }
 
         try {
           this._mapToFields(lastLine)
-          this._emitEndEvent()
+          this._emitTotalEvent()
           callback()
         } catch (error) {
           callback(error as CsvTransformError)
@@ -149,12 +149,12 @@ export class CsvTransformStream<T> extends Transform {
     this.emit(Event.Current, data, total)
   }
 
-  private _emitEndEvent() {
+  private _emitTotalEvent() {
     const total = {
       count: this.numberOfRows,
       amount: this.byteSize,
     }
-    this.emit(Event.End, total)
+    this.emit(Event.Total, total)
   }
 
   private _mapToFields(line: string): void {

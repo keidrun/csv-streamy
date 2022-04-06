@@ -1,5 +1,7 @@
 # @csv-stream/lib
 
+[![@csv-stream/lib](https://github.com/keidrun/csv-stream/actions/workflows/csv-stream-lib.yml/badge.svg)](https://github.com/keidrun/csv-stream/actions/workflows/csv-stream-lib.yml) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Csv Stream library for Node.js.
 
 ## Install

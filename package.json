@@ -10,6 +10,10 @@
   "devDependencies": {
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
+    "@semantic-release/commit-analyzer": "^9.0.2",
+    "@semantic-release/github": "^8.0.4",
+    "@semantic-release/npm": "^9.0.1",
+    "@semantic-release/release-notes-generator": "^10.0.3",
     "@tsconfig/node16-strictest-esm": "^1.0.0",
     "@types/jest": "^27.4.1",
     "@types/node": "^16.11.26",
@@ -36,10 +40,7 @@
     "lint": "eslint . --cache --fix --ext js,ts",
     "format": "prettier --write '**/*.{js,ts,json}'",
     "test-clear": "jest --clearCache",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage --passWithNoTests",
-    "build-clean": "rimraf ./packages/*/build",
-    "build": "npm run build -ws --if-present",
-    "release": "npm run release -ws --if-present"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage --passWithNoTests"
   },
   "lint-staged": {
     "*.{js,ts}": [

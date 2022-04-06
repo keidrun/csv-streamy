@@ -1,6 +1,6 @@
 {
   "name": "@csv-stream/lib",
-  "version": "0.0.0",
+  "version": "0.0.0-development",
   "description": "CSV Stream Library for Node.js.",
   "keywords": [
     "csv",
@@ -17,11 +17,13 @@
   },
   "scripts": {
     "start": "node --loader ts-node/esm src/index.ts",
+    "build-clean": "rimraf ./build",
     "build": "tsc",
     "watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch --coverage",
     "test-clear": "jest --clearCache",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
-    "release": "npx semantic-release"
+    "release": "npx semantic-release",
+    "semantic-release": "semantic-release"
   },
   "config": {
     "commitizen": {
@@ -30,7 +32,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/keidrun/csv-stream.git",
+    "url": "https://github.com/keidrun/csv-stream.git",
     "directory": "packages/csv-stream-lib"
   },
   "author": "keidrun",
@@ -38,5 +40,8 @@
   "bugs": {
     "url": "https://github.com/keidrun/csv-stream/issues"
   },
-  "homepage": "https://github.com/keidrun/csv-stream#readme"
+  "homepage": "https://github.com/keidrun/csv-stream#readme",
+  "devDependencies": {
+    "semantic-release": "^19.0.2"
+  }
 }

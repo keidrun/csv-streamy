@@ -2,7 +2,6 @@ import { CsvTransformStream, ParserOptions, ConverterOptions } from './CsvTransf
 import { CsvTransformError } from './errors/CsvTransformError.js'
 import { InvalidCsvFormatError } from './errors/InvalidCsvFormatError.js'
 import { InvalidNumberOfFieldsError } from './errors/InvalidNumberOfFieldsError.js'
-import { dirname, filename } from './utils.js'
 
 export function createCsvParser(options?: ParserOptions): CsvTransformStream<Buffer> {
   return CsvTransformStream.asParser(options)
@@ -19,6 +18,4 @@ export {
   CsvTransformError,
   InvalidCsvFormatError,
   InvalidNumberOfFieldsError,
-  dirname,
-  filename,
 }

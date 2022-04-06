@@ -8,7 +8,14 @@
     "cli"
   ],
   "type": "module",
-  "exports": "./build/index.js",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
+    }
+  },
   "scripts": {
     "start": "node --loader ts-node/esm src/index.ts",
     "build": "tsc",
@@ -32,5 +39,8 @@
   "bugs": {
     "url": "https://github.com/keidrun/csv-stream/issues"
   },
-  "homepage": "https://github.com/keidrun/csv-stream#readme"
+  "homepage": "https://github.com/keidrun/csv-stream#readme",
+  "dependencies": {
+    "@csv-stream/lib": "^0.0.0"
+  }
 }

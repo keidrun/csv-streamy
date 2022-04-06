@@ -1,5 +1,5 @@
 {
-  "name": "@csv-stream/cli",
+  "name": "csv-streamy-cli",
   "version": "0.0.0",
   "description": "Command line tool to handle a csv file.",
   "keywords": [

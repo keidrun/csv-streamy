@@ -1,13 +1,13 @@
-# @csv-stream/lib
+# csv-stream-lib
 
-[![@csv-stream/lib](https://github.com/keidrun/csv-stream/actions/workflows/csv-stream-lib.yml/badge.svg)](https://github.com/keidrun/csv-stream/actions/workflows/csv-stream-lib.yml) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![csv-streamy-lib](https://github.com/keidrun/csv-stream/actions/workflows/csv-streamy-lib.yml/badge.svg)](https://github.com/keidrun/csv-stream/actions/workflows/csv-streamy-lib.yml) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 CSV Stream library for Node.js.
 
 ## Install
 
 ```shell
-npm i @csv-stream/lib
+npm i csv-streamy-lib
 ```
 
 ## Usage
@@ -19,7 +19,7 @@ You can parse your csv file, which can contain headers and enclose fields in dou
 ```typescript
 import * as fs from 'fs'
 import * as path from 'path'
-import { createCsvParser } from '@csv-stream/lib'
+import { createCsvParser } from 'csv-streamy-lib'
 
 const reader = fs.createReadStream(path.resolve(__dirname, 'your.csv'))
 const parser = createCsvParser({ hasHeaders: true, hasDoubleQuotes: true })
@@ -93,7 +93,7 @@ End => row count: 2, data amount: 76 [bytes].
 You can convert your handy objects to csv format strings, which can contain headers and enclose fields in double-quotes, then create buffer stream.
 
 ```typescript
-import { createCsvConverter } from '@csv-stream/lib'
+import { createCsvConverter } from 'csv-streamy-lib'
 
 const converter = createCsvConverter({ hasHeaders: true, hasDoubleQuotes: true })
 
@@ -120,7 +120,7 @@ Of course, you can export them to a file.
 ```typescript
 import * as fs from 'fs'
 import * as path from 'path'
-import { createCsvConverter } from '@csv-stream/lib'
+import { createCsvConverter } from 'csv-streamy-lib'
 
 const converter = createCsvConverter({ hasHeaders: true, hasDoubleQuotes: true })
 const writer = fs.createWriteStream(path.resolve(__dirname, 'output.csv'))

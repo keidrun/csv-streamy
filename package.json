@@ -1,5 +1,5 @@
 {
-  "name": "@csv-stream/monorepo",
+  "name": "csv-streamy-monorepo",
   "private": true,
   "workspaces": [
     "packages/*"

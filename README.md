@@ -1,3 +1,3 @@
-# @csv-stream
+# csv-streamy
 
 CSV Stream library.

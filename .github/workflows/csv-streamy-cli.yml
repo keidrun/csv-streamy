@@ -1,4 +1,4 @@
-name: '@csv-stream/cli'
+name: 'csv-streamy-cli'
 
 on:
   push:
@@ -27,4 +27,4 @@ jobs:
       - name: Install packages
         run: npm ci
       - name: Test
-        run: npm run test -w @csv-stream/cli
+        run: npm run test -w csv-streamy-cli

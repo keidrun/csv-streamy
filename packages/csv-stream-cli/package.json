@@ -14,7 +14,8 @@
     "build": "tsc",
     "watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch --coverage",
     "test-clear": "jest --clearCache",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+    "release": "npx semantic-release"
   },
   "config": {
     "commitizen": {

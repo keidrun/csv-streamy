@@ -28,3 +28,20 @@ jobs:
         run: npm ci
       - name: Test
         run: npm run test -w @csv-stream/lib
+
+  publish-npm:
+    needs: [test]
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm run build -w @csv-stream/lib
+      - run: npm run semantic-release -w @csv-stream/lib
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

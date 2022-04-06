@@ -1,16 +1,6 @@
-import { filename, dirname, splitByNewline, splitByComma } from '../utils.js'
+import { splitByNewline, splitByComma } from '../utils.js'
 
 describe('utils', () => {
-  describe('filename', () => {
-    test('should return a file path', () => {
-      expect(filename({ url: 'file:///dir/file.txt' })).toBe('/dir/file.txt')
-    })
-  })
-  describe('dirname', () => {
-    test('should return a directory path', () => {
-      expect(dirname({ url: 'file:///dir/file.txt' })).toBe('/dir')
-    })
-  })
   describe('splitByNewline', () => {
     test('should split data by new line', () => {
       const data = `header[1],header[2],header[3],header[4],header[5]

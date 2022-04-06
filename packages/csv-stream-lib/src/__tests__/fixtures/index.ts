@@ -1,7 +1,7 @@
 import type { Readable } from 'stream'
 import * as fs from 'fs'
 import * as path from 'path'
-import { dirname } from '../../utils.js'
+import { dirname } from 'dirfilename'
 
 export function readTestData(
   baseName: string,

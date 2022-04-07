@@ -2,7 +2,7 @@
 
 [![NPM version](https://badge.fury.io/js/csv-streamy-lib.svg)](https://npmjs.org/package/csv-streamy-lib) [![csv-streamy-lib](https://github.com/keidrun/csv-stream/actions/workflows/csv-streamy-lib.yml/badge.svg)](https://github.com/keidrun/csv-stream/actions/workflows/csv-streamy-lib.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-CSV Stream library for Node.js.
+**CSV Streamy Lib** - CSV Stream library for Node.js.
 
 ## Install
 

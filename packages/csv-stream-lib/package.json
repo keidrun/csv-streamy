@@ -40,8 +40,5 @@
   "bugs": {
     "url": "https://github.com/keidrun/csv-stream/issues"
   },
-  "homepage": "https://github.com/keidrun/csv-stream#readme",
-  "devDependencies": {
-    "semantic-release": "^19.0.2"
-  }
+  "homepage": "https://github.com/keidrun/csv-stream/tree/main/packages/csv-stream-lib#README.md"
 }

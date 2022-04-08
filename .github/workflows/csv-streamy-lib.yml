@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - 'packages/csv-stream-lib/**'
-      - '.github/workflows/csv-stream-lib.yml'
+      - '.github/workflows/csv-streamy-lib.yml'
   pull_request:
     paths:
       - 'packages/csv-stream-lib/**'

@@ -28,7 +28,7 @@ reader
   .pipe(parser)
   .on('error', (error) => console.log(error))
   .on('data', (row) => console.log(row))
-  .on('end', () => console.log('Done!'))
+  .on('end', () => console.log('End'))
 ```
 
 - Input
@@ -133,9 +133,9 @@ converter.write({ 'header[1]': 'item[3][1]', 'header[2]': 'item[3][2]', 'header[
 converter.end()
 ```
 
-## Accepted CSV format
+## Acceptable CSV format
 
-This basically follows [RFC4180](https://datatracker.ietf.org/doc/html/rfc4180) but is more practical for convenience. This accepts a csv file that satisfy the following format:
+This basically follows [RFC4180](https://datatracker.ietf.org/doc/html/rfc4180) but additionally needs to satisfly the following rules to make a common csv file easier to use:
 
 - Fields must be Comma-Separated Values. (NOT Tab-Separated.)
 - Fields can be enclosed in double-quotes to contain line breaks, double quotes and commas. (BUT a file cannot mix enclosed fields and not-enclosed fields.)

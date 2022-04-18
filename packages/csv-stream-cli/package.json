@@ -1,28 +1,37 @@
 {
-  "name": "csv-streamy-cli",
-  "version": "0.0.0",
+  "name": "@csv-streamy/cli",
+  "version": "0.0.0-development",
   "description": "Command line tool to handle a csv file.",
   "keywords": [
+    "csv-streamy",
     "csv",
     "stream",
     "cli"
   ],
   "type": "module",
-  "main": "./build/index.js",
-  "types": "./build/index.d.ts",
+  "bin": {
+    "csv": "./build/bin/index.js"
+  },
+  "main": "./build/bin/index.js",
+  "types": "./build/bin/index.d.ts",
   "exports": {
     ".": {
-      "types": "./build/index.d.ts",
-      "default": "./build/index.js"
+      "types": "./build/bin/index.d.ts",
+      "default": "./build/bin/index.js"
     }
   },
   "scripts": {
-    "start": "node --loader ts-node/esm src/index.ts",
+    "start": "node --loader ts-node/esm src/bin/index.ts",
+    "start-bin": "node build/bin/index.js",
+    "build-clean": "rimraf ./build",
     "build": "tsc",
     "watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch --coverage",
     "test-clear": "jest --clearCache",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
-    "release": "npx semantic-release"
+    "semantic-release": "semantic-release"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "config": {
     "commitizen": {
@@ -31,7 +40,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/keidrun/csv-stream.git",
+    "url": "https://github.com/keidrun/csv-stream.git",
     "directory": "packages/csv-stream-cli"
   },
   "author": "keidrun",
@@ -39,5 +48,12 @@
   "bugs": {
     "url": "https://github.com/keidrun/csv-stream/issues"
   },
-  "homepage": "https://github.com/keidrun/csv-stream#readme"
+  "homepage": "https://github.com/keidrun/csv-stream/tree/main/packages/csv-stream-cli#README.md",
+  "dependencies": {
+    "@csv-streamy/lib": "^1.0.2",
+    "chalk": "^5.0.1",
+    "commander": "^9.1.0",
+    "dirfilename": "^1.0.2",
+    "exit": "^0.1.2"
+  }
 }

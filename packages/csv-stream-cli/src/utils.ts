@@ -11,7 +11,9 @@ const SIZE_UNIT: {
   Y: 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024,
 }
 
-export function toInt(size: string): number {
+export function toInt(size?: string): number {
+  if (!size) return NaN
+
   const numStr = size.slice(0, -1)
   const num = !Number.isNaN(Number(numStr)) ? Math.ceil(Number(numStr)) : NaN
   const unitKey = size.slice(-1)

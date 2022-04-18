@@ -2,6 +2,12 @@ import { toInt } from '../utils.js'
 
 describe('utils', () => {
   describe('toInt', () => {
+    test('should return a NaN when a size is undefined', () => {
+      expect(toInt(undefined)).toBe(NaN)
+    })
+    test('should return a NaN when a size is empty string', () => {
+      expect(toInt('')).toBe(NaN)
+    })
     test('should return a number when a size is integer', () => {
       expect(toInt('39')).toBe(39)
     })

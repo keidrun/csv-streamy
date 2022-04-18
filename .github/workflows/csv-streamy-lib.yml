@@ -1,4 +1,4 @@
-name: 'csv-streamy-lib'
+name: 'CI'
 
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
       - name: Install packages
         run: npm ci
       - name: Test
-        run: npm run test -w csv-streamy-lib
+        run: npm run test -w @csv-streamy/lib
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
@@ -46,8 +46,8 @@ jobs:
           node-version: 16
           registry-url: https://registry.npmjs.org/
       - run: npm ci
-      - run: npm run build -w csv-streamy-lib
-      - run: npm run semantic-release -w csv-streamy-lib
+      - run: npm run build -w @csv-streamy/lib
+      - run: npm run semantic-release -w @csv-streamy/lib
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,5 +1,5 @@
 {
-  "name": "csv-streamy-lib",
+  "name": "@csv-streamy/lib",
   "version": "0.0.0-development",
   "description": "CSV Stream Library for Node.js.",
   "keywords": [
@@ -22,8 +22,10 @@
     "watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch --coverage",
     "test-clear": "jest --clearCache",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
-    "release": "npx semantic-release",
     "semantic-release": "semantic-release"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "config": {
     "commitizen": {

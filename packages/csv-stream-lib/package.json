@@ -3,8 +3,10 @@
   "version": "0.0.0-development",
   "description": "CSV Stream Library for Node.js.",
   "keywords": [
+    "csv-streamy",
     "csv",
-    "stream"
+    "stream",
+    "lib"
   ],
   "type": "module",
   "main": "./build/index.js",

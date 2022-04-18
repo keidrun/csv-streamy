@@ -16,7 +16,10 @@ npm i -g @csv-streamy/cli
 $ csv help
 Usage: csv [options] [command]
 
+Command line tool to handle a csv file.
+
 Options:
+  -V, --version    output the version number
   -h, --help       display help for command
 
 Commands:
@@ -33,7 +36,7 @@ Usage: csv split [options]
 split a csv file into pieces
 
 Options:
-  -f, --file            a csv file path
+  -f, --file <PATH>     a csv file path
   -h, --headers         if an input file has headers row
   -d, --double-quotes   if fields are enclosed in double-quotes
   -r, --rows <NUMBER>   NUMBER rows per an output file

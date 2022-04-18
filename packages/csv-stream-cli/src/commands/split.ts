@@ -1,35 +1,40 @@
 import chalk from 'chalk'
-// import { toInt } from '../utils.js'
+import { toInt } from '../utils.js'
 
-// type SplitCommandArgs = {
-//   file: string
-//   rows: number
-//   bytes: number
-// }
-
-// function validateArgs(args: SplitCommandArgs) {
-
-// }
-
-export function split(args: object) {
-  console.log(chalk.green.bold(`${JSON.stringify(args)}`))
-  // console.log(chalk.green.bold(`file: ${args.file}`))
-  // console.log(chalk.green.bold(`rows: ${args.rows}`))
-  // console.log(chalk.green.bold(`bytes: ${args.bytes}`))
+type SplitCommandArgs = {
+  file: string
+  headers?: boolean
+  doubleQuotes?: boolean
+  rows?: number
+  bytes?: string
+  fileExtension?: boolean
 }
 
-/**
-csv split [options] [input csv file] [output base file name]
+export function split({
+  file,
+  headers = false,
+  doubleQuotes = false,
+  rows = NaN,
+  bytes = '',
+  fileExtension = false,
+}: SplitCommandArgs): void {
+  const bytesNum = toInt(bytes)
 
-csv split -r 10 input.csv
+  if (!rows && !bytesNum) {
+    console.log(chalk.green.yellow('--rows or --bytes option is required.'))
+    process.exit(1)
+  } else if (!!rows && !!bytesNum) {
+    console.log(chalk.green.yellow('Only one --rows or --bytes can be specified.'))
+    process.exit(1)
+  }
 
---rows -r
---bytes -b
---suffix-length -a
---additional-suffix -s
---extension -e
---verbose
-*/
+  console.log(chalk.green.yellow('file:', file))
+  console.log(chalk.green.yellow('headers:', headers))
+  console.log(chalk.green.yellow('doubleQuotes:', doubleQuotes))
+  console.log(chalk.green.yellow('rows:', rows))
+  console.log(chalk.green.yellow('bytesNum:', bytesNum))
+  console.log(chalk.green.yellow('fileExtension:', fileExtension))
+}
 
 // import * as fs from 'fs'
 // import * as path from 'path'

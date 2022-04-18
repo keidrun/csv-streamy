@@ -7,5 +7,37 @@
 ## Install
 
 ```shell
-npm i @csv-streamy/cli
+npm i -g @csv-streamy/cli
+```
+
+## Usage
+
+```shell
+$ csv help
+Usage: csv [options] [command]
+
+Options:
+  -h, --help       display help for command
+
+Commands:
+  split [options]  split a csv file into pieces
+  help [command]   display help for command
+```
+
+### split a csv file into pieces
+
+```shell
+$ csv help split
+Usage: csv split [options]
+
+split a csv file into pieces
+
+Options:
+  -f, --file            a csv file path
+  -h, --headers         if an input file has headers row
+  -d, --double-quotes   if fields are enclosed in double-quotes
+  -r, --rows <NUMBER>   NUMBER rows per an output file
+  -b, --bytes <SIZE>    SIZE bytes per an output file
+  -x, --file-extension  whether to add an extension to output files
+  --help                display help for command
 ```

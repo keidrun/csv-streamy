@@ -40,15 +40,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/keidrun/csv-stream.git",
-    "directory": "packages/csv-stream-cli"
+    "url": "https://github.com/keidrun/csv-streamy.git",
+    "directory": "packages/csv-streamy-cli"
   },
   "author": "keidrun",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/keidrun/csv-stream/issues"
+    "url": "https://github.com/keidrun/csv-streamy/issues"
   },
-  "homepage": "https://github.com/keidrun/csv-stream/tree/main/packages/csv-stream-cli#README.md",
+  "homepage": "https://github.com/keidrun/csv-streamy/tree/main/packages/csv-streamy-cli#README.md",
   "dependencies": {
     "@csv-streamy/lib": "^1.0.2",
     "chalk": "^5.0.1",

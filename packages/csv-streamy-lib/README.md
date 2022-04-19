@@ -1,6 +1,6 @@
 # @csv-streamy/lib
 
-[![npm version](https://badge.fury.io/js/@csv-streamy%2Flib.svg)](https://badge.fury.io/js/@csv-streamy%2Flib) [![CI](https://github.com/keidrun/csv-stream/workflows/CI-lib/badge.svg)](https://github.com/keidrun/csv-stream/actions/workflows/csv-streamy-lib.yml) [![codecov](https://codecov.io/gh/keidrun/csv-stream/branch/main/graph/badge.svg?flag=csv-streamy-lib)](https://codecov.io/gh/keidrun/csv-stream/tree/main/packages/csv-stream-lib) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm version](https://badge.fury.io/js/@csv-streamy%2Flib.svg)](https://badge.fury.io/js/@csv-streamy%2Flib) [![CI](https://github.com/keidrun/csv-streamy/workflows/CI-lib/badge.svg)](https://github.com/keidrun/csv-streamy/actions/workflows/csv-streamy-lib.yml) [![codecov](https://codecov.io/gh/keidrun/csv-streamy/branch/main/graph/badge.svg?flag=csv-streamy-lib)](https://codecov.io/gh/keidrun/csv-streamy/tree/main/packages/csv-streamy-lib) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **CSV Streamy Lib** - CSV Stream library for Node.js.
 

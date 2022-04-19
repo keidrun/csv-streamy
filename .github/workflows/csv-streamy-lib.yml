@@ -4,11 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - 'packages/csv-stream-lib/**'
+      - 'packages/csv-streamy-lib/**'
       - '.github/workflows/csv-streamy-lib.yml'
   pull_request:
     paths:
-      - 'packages/csv-stream-lib/**'
+      - 'packages/csv-streamy-lib/**'
 
 jobs:
   test:
@@ -31,7 +31,7 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
-          directory: ./packages/csv-stream-lib/coverage/
+          directory: ./packages/csv-streamy-lib/coverage/
           flags: csv-streamy-lib
           fail_ci_if_error: false
 

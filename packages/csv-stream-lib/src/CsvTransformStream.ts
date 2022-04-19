@@ -1,7 +1,8 @@
 import { Transform, TransformCallback, TransformOptions } from 'stream'
 import { splitByNewline, splitByComma } from './utils.js'
-import { InvalidNumberOfFieldsError } from './errors/InvalidNumberOfFieldsError.js'
 import type { CsvTransformError } from './errors/CsvTransformError.js'
+import { InvalidNumberOfFieldsError } from './errors/InvalidNumberOfFieldsError.js'
+import { UndefinedDataError } from './errors/UndefinedDataError.js'
 
 export type ParserOptions = {
   hasHeaders?: boolean
@@ -13,7 +14,9 @@ export type ConverterOptions = {
   hasDoubleQuotes?: boolean
 }
 
-export type CsvRowData = { [key: string]: string }
+export type CsvRowData = {
+  data: { [key: string]: string }
+}
 
 export enum Event {
   Current = 'current',
@@ -161,31 +164,35 @@ export class CsvTransformStream<T> extends Transform {
 
   private _mapToFields(line: string): void {
     const fields = splitByComma(line, { hasDoubleQuotes: this.hasDoubleQuotes })
-    const row: { [key: string]: string } = {}
+    const { data }: CsvRowData = { data: {} }
     if (this.hasHeaders) {
       if (this.headers.length !== fields.length) {
         throw new InvalidNumberOfFieldsError(this.headers.length, fields.length)
       }
 
       for (const [index, field] of fields.entries()) {
-        row[this.headers[index] as string] = field
+        data[this.headers[index] as string] = field
       }
-      this.push(row)
+      this.push({ data })
 
-      this._emitCurrentEvent(row, line)
+      this._emitCurrentEvent({ data }, line)
     } else {
       for (const [index, field] of fields.entries()) {
-        row[`${index + 1}`] = field
+        data[`${index + 1}`] = field
       }
-      this.push(row)
+      this.push({ data })
 
-      this._emitCurrentEvent(row, line)
+      this._emitCurrentEvent({ data }, line)
     }
   }
 
-  private _mapToLine(row: CsvRowData): void {
+  private _mapToLine({ data }: CsvRowData): void {
+    if (!data) {
+      throw new UndefinedDataError('data')
+    }
+
     if (this.hasHeaders && this.headers.length === 0) {
-      for (const key of Object.keys(row)) {
+      for (const key of Object.keys(data)) {
         this.headers.push(key)
       }
       const headersline = this.hasDoubleQuotes ? `"${this.headers.join('","')}"\n` : `${this.headers.join(',')}\n`
@@ -193,8 +200,8 @@ export class CsvTransformStream<T> extends Transform {
     }
 
     const fields: string[] = []
-    for (const key of Object.keys(row)) {
-      fields.push(row[key] as string)
+    for (const key of Object.keys(data)) {
+      fields.push(data[key] as string)
     }
     if (this.hasHeaders && this.headers.length !== fields.length) {
       throw new InvalidNumberOfFieldsError(this.headers.length, fields.length)

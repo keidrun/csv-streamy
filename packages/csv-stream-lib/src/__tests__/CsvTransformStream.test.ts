@@ -3,6 +3,7 @@ import { readTestData } from './fixtures/index.js'
 import { CsvTransformStream } from '../CsvTransformStream.js'
 import { InvalidNumberOfFieldsError } from '../errors/InvalidNumberOfFieldsError.js'
 import { InvalidCsvFormatError } from '../errors/InvalidCsvFormatError.js'
+import { UndefinedDataError } from '../errors/UndefinedDataError.js'
 
 describe('CsvTransformStream', () => {
   describe('asParser', () => {
@@ -310,6 +311,21 @@ describe('CsvTransformStream', () => {
       })
     })
     describe('convert', () => {
+      test('should throw error when the input data is undefined', (done) => {
+        const converter = CsvTransformStream.asConverter()
+
+        converter.on('error', (error) => {
+          try {
+            expect(error).toBeInstanceOf(UndefinedDataError)
+            done()
+          } catch (error) {
+            done(error)
+          }
+        })
+
+        converter.write({})
+        converter.end()
+      })
       test('should pass csv format stream', (done) => {
         const converter = CsvTransformStream.asConverter()
         const spy = new PassThrough()
@@ -331,8 +347,8 @@ describe('CsvTransformStream', () => {
             }
           })
 
-        converter.write({ 'header[1]': 'item[1][1]', 'header[2]': 'item[1][2]', 'header[3]': 'item[1][3]' })
-        converter.write({ 'header[1]': 'item[2][1]', 'header[2]': 'item[2][2]', 'header[3]': 'item[2][3]' })
+        converter.write({ data: { 'header[1]': 'item[1][1]', 'header[2]': 'item[1][2]', 'header[3]': 'item[1][3]' } })
+        converter.write({ data: { 'header[1]': 'item[2][1]', 'header[2]': 'item[2][2]', 'header[3]': 'item[2][3]' } })
         converter.end()
       })
       test('should pass csv format stream when its option enable only hasHeaders flag', (done) => {
@@ -357,8 +373,8 @@ describe('CsvTransformStream', () => {
             }
           })
 
-        converter.write({ 'header[1]': 'item[1][1]', 'header[2]': 'item[1][2]', 'header[3]': 'item[1][3]' })
-        converter.write({ 'header[1]': 'item[2][1]', 'header[2]': 'item[2][2]', 'header[3]': 'item[2][3]' })
+        converter.write({ data: { 'header[1]': 'item[1][1]', 'header[2]': 'item[1][2]', 'header[3]': 'item[1][3]' } })
+        converter.write({ data: { 'header[1]': 'item[2][1]', 'header[2]': 'item[2][2]', 'header[3]': 'item[2][3]' } })
         converter.end()
       })
       test('should pass csv format stream when its option enable only hasDoubleQuotes flag', (done) => {
@@ -382,8 +398,8 @@ describe('CsvTransformStream', () => {
             }
           })
 
-        converter.write({ 'header[1]': 'item[1][1]', 'header[2]': 'item[1][2]', 'header[3]': 'item[1][3]' })
-        converter.write({ 'header[1]': 'item[2][1]', 'header[2]': 'item[2][2]', 'header[3]': 'item[2][3]' })
+        converter.write({ data: { 'header[1]': 'item[1][1]', 'header[2]': 'item[1][2]', 'header[3]': 'item[1][3]' } })
+        converter.write({ data: { 'header[1]': 'item[2][1]', 'header[2]': 'item[2][2]', 'header[3]': 'item[2][3]' } })
         converter.end()
       })
       test('should pass csv format stream when its option enable hasHeaders flag and hasDoubleQuotes flag', (done) => {
@@ -408,8 +424,8 @@ describe('CsvTransformStream', () => {
             }
           })
 
-        converter.write({ 'header[1]': 'item[1][1]', 'header[2]': 'item[1][2]', 'header[3]': 'item[1][3]' })
-        converter.write({ 'header[1]': 'item[2][1]', 'header[2]': 'item[2][2]', 'header[3]': 'item[2][3]' })
+        converter.write({ data: { 'header[1]': 'item[1][1]', 'header[2]': 'item[1][2]', 'header[3]': 'item[1][3]' } })
+        converter.write({ data: { 'header[1]': 'item[2][1]', 'header[2]': 'item[2][2]', 'header[3]': 'item[2][3]' } })
         converter.end()
       })
     })

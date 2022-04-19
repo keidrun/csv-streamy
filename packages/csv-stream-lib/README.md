@@ -10,18 +10,98 @@
 npm i @csv-streamy/lib
 ```
 
+## Brief examples
+
+### Read and Write your CSV file
+
+```typescript
+import { resolve } from 'path'
+import { pipeline } from 'stream/promises'
+import { createReadStream, createWriteStream } from 'fs'
+import { createCsvParser, createCsvConverter, CsvRowData } from '@csv-streamy/lib'
+
+// For example, it just converts all fields to uppercase letters.
+async function processRow({ data }: CsvRowData): Promise<CsvRowData> {
+  for (const [header, field] of Object.entries(data)) {
+    data[header] = field.toUpperCase()
+  }
+  return Promise.resolve({ data })
+}
+
+async function run() {
+  await pipeline(
+    createReadStream(resolve(__dirname, 'input.csv'), { encoding: 'utf-8' }),
+    createCsvParser({ hasHeaders: true, hasDoubleQuotes: true }),
+    async function* (source) {
+      for await (const row of source) {
+        yield await processRow(row as CsvRowData)
+      }
+    },
+    createCsvConverter({ hasHeaders: true, hasDoubleQuotes: true }),
+    createWriteStream(resolve(__dirname, 'output.csv'), { encoding: 'utf-8' }),
+  )
+  console.log('Woo-hoo! Succeeded!!')
+}
+
+run().catch(console.error)
+```
+
+### Read and Write your CSV file with `stat`
+
+```typescript
+import { resolve } from 'path'
+import { pipeline } from 'stream/promises'
+import { createReadStream, createWriteStream } from 'fs'
+import { createCsvParser, createCsvConverter, CsvRowData } from '@csv-streamy/lib'
+
+// You can observe the number of row as `count` and the bytes of data as `amount` in `stat`.
+// For example, it converts all fields to uppercase letters if `count` is even
+// or it capitalizes all fields if `amount` is 200 bytes or more.
+async function processRow({ data, stat }: CsvRowData): Promise<CsvRowData> {
+  const { count, amount } = { ...stat }
+  if (!!count && count % 2 === 0) {
+    for (const [header, field] of Object.entries(data)) {
+      data[header] = field.toUpperCase()
+    }
+  } else if (!!amount && amount >= 200) {
+    for (const [header, field] of Object.entries(data)) {
+      data[header] = field.charAt(0).toUpperCase() + field.slice(1)
+    }
+  }
+  return Promise.resolve({ data })
+}
+
+async function run() {
+  await pipeline(
+    createReadStream(resolve(__dirname, 'input.csv'), { encoding: 'utf-8' }),
+    createCsvParser({ hasHeaders: true, hasDoubleQuotes: true }),
+    async function* (source) {
+      for await (const row of source) {
+        yield await processRow(row as CsvRowData)
+      }
+    },
+    createCsvConverter({ hasHeaders: true, hasDoubleQuotes: true }),
+    createWriteStream(resolve(__dirname, 'output.csv'), { encoding: 'utf-8' }),
+  )
+  console.log('Great! Perfect!!')
+}
+
+run().catch(console.error)
+```
+
 ## Usage
 
 ### Parsing
 
 You can parse your csv file, which can contain headers and enclose fields in double-quotes, to handy objects.
+Each object contains fields per row as `data` and statistics data as `stat`, which contains the number of row as `count` and the bytes of data as `amount`.
 
 ```typescript
-import fs from 'fs'
-import path from 'path'
+import { resolve } from 'path'
+import { createReadStream } from 'fs'
 import { createCsvParser } from '@csv-streamy/lib'
 
-const reader = fs.createReadStream(path.resolve(__dirname, 'your.csv'))
+const reader = createReadStream(resolve(__dirname, 'input.csv'))
 const parser = createCsvParser({ hasHeaders: true, hasDoubleQuotes: true })
 
 reader
@@ -33,64 +113,41 @@ reader
 
 - Input
 
-```csv:your.csv
-"header[1]","header[2]","header[3]"
-"item[1][1]","item[1][2]","item[1][3]"
-"item[2][1]","item[2][2]","item[2][3]"
+```csv
+"header[1]","header[2]","header[3]","header[4]","header[5]"
+"item[1][1]","item[1][2]","item[1][3]","item[1][4]","item[1][5]"
+"item[2][1]","item[2][2]","item[2][3]","item[2][4]","item[2][5]"
 ```
 
 - Output
 
 ```shell
 {
-  'header[1]': 'item[1][1]',
-  'header[2]': 'item[1][2]',
-  'header[3]': 'item[1][3]'
+  data: {
+    'header[1]': 'item[1][1]',
+    'header[2]': 'item[1][2]',
+    'header[3]': 'item[1][3]',
+    'header[4]': 'item[1][4]',
+    'header[5]': 'item[1][5]'
+  },
+  stat: { count: 1, amount: 64 }
 }
 {
-  'header[1]': 'item[2][1]',
-  'header[2]': 'item[2][2]',
-  'header[3]': 'item[2][3]'
+  data: {
+    'header[1]': 'item[2][1]',
+    'header[2]': 'item[2][2]',
+    'header[3]': 'item[2][3]',
+    'header[4]': 'item[2][4]',
+    'header[5]': 'item[2][5]'
+  },
+  stat: { count: 2, amount: 128 }
 }
 End
 ```
 
-This parser provides 2 extra events that are `current` event and `total` event.
-
-```typescript
-reader
-  .pipe(parser)
-  .on('error', (error) => console.log(error))
-  .on('current', (row, currentTotal: { count: number; amount: number }) => {
-    console.log(row)
-    console.log(`Progress => row count: ${currentTotal.count}, data amount: ${currentTotal.amount} [bytes].`)
-  })
-  .on('total', (total: { count: number; amount: number }) =>
-    console.log(`End => row count: ${total.count}, data amount: ${total.amount} [bytes].`),
-  )
-```
-
-- Output
-
-```shell
-{
-  'header[1]': 'item[1][1]',
-  'header[2]': 'item[1][2]',
-  'header[3]': 'item[1][3]'
-}
-Progress => row count: 1, data amount: 38 [bytes].
-{
-  'header[1]': 'item[2][1]',
-  'header[2]': 'item[2][2]',
-  'header[3]': 'item[2][3]'
-}
-Progress => row count: 2, data amount: 76 [bytes].
-End => row count: 2, data amount: 76 [bytes].
-```
-
 ### Converting
 
-You can convert your handy objects to csv format strings, which can contain headers and enclose fields in double-quotes, then create buffer stream.
+You can convert your handy objects with `data` to csv format strings, which can contain headers and enclose fields in double-quotes, then create buffer stream.
 
 ```typescript
 import { createCsvConverter } from '@csv-streamy/lib'
@@ -99,9 +156,9 @@ const converter = createCsvConverter({ hasHeaders: true, hasDoubleQuotes: true }
 
 converter.pipe(process.stdout).on('end', () => process.exit())
 
-converter.write({ 'header[1]': 'item[1][1]', 'header[2]': 'item[1][2]', 'header[3]': 'item[1][3]' })
-converter.write({ 'header[1]': 'item[2][1]', 'header[2]': 'item[2][2]', 'header[3]': 'item[2][3]' })
-converter.write({ 'header[1]': 'item[3][1]', 'header[2]': 'item[3][2]', 'header[3]': 'item[3][3]' })
+converter.write({ data: { 'header[1]': 'item[1][1]', 'header[2]': 'item[1][2]', 'header[3]': 'item[1][3]' } })
+converter.write({ data: { 'header[1]': 'item[2][1]', 'header[2]': 'item[2][2]', 'header[3]': 'item[2][3]' } })
+converter.write({ data: { 'header[1]': 'item[3][1]', 'header[2]': 'item[3][2]', 'header[3]': 'item[3][3]' } })
 converter.end()
 ```
 
@@ -118,18 +175,18 @@ converter.end()
 Of course, you can export them to a file.
 
 ```typescript
-import fs from 'fs'
-import path from 'path'
+import { resolve } from 'path'
+import { createWriteStream } from 'fs'
 import { createCsvConverter } from '@csv-streamy/lib'
 
 const converter = createCsvConverter({ hasHeaders: true, hasDoubleQuotes: true })
-const writer = fs.createWriteStream(path.resolve(__dirname, 'output.csv'))
+const writer = createWriteStream(resolve(__dirname, 'output.csv'))
 
 converter.pipe(writer).on('end', () => writer.end())
 
-converter.write({ 'header[1]': 'item[1][1]', 'header[2]': 'item[1][2]', 'header[3]': 'item[1][3]' })
-converter.write({ 'header[1]': 'item[2][1]', 'header[2]': 'item[2][2]', 'header[3]': 'item[2][3]' })
-converter.write({ 'header[1]': 'item[3][1]', 'header[2]': 'item[3][2]', 'header[3]': 'item[3][3]' })
+converter.write({ data: { 'header[1]': 'item[1][1]', 'header[2]': 'item[1][2]', 'header[3]': 'item[1][3]' } })
+converter.write({ data: { 'header[1]': 'item[2][1]', 'header[2]': 'item[2][2]', 'header[3]': 'item[2][3]' } })
+converter.write({ data: { 'header[1]': 'item[3][1]', 'header[2]': 'item[3][2]', 'header[3]': 'item[3][3]' } })
 converter.end()
 ```
 

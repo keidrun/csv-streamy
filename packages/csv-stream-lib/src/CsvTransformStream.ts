@@ -16,11 +16,10 @@ export type ConverterOptions = {
 
 export type CsvRowData = {
   data: { [key: string]: string }
-}
-
-export enum Event {
-  Current = 'current',
-  Total = 'total',
+  stat?: {
+    count: number
+    amount: number
+  }
 }
 
 export interface CsvTransformOptions<T> extends TransformOptions {
@@ -97,14 +96,12 @@ export class CsvTransformStream<T> extends Transform {
         this.buffer = Buffer.alloc(0)
 
         if (lastLine === '') {
-          this._emitTotalEvent()
           callback()
           return
         }
 
         try {
           this._mapToFields(lastLine)
-          this._emitTotalEvent()
           callback()
         } catch (error) {
           callback(error as CsvTransformError)
@@ -144,27 +141,15 @@ export class CsvTransformStream<T> extends Transform {
     this.hasDoubleQuotes = options?.hasDoubleQuotes || false
   }
 
-  private _emitCurrentEvent(data: CsvRowData, rawData: string) {
+  private _updateStat(line: string) {
     this.numberOfRows++
-    this.byteSize += Buffer.byteLength(rawData)
-    const total = {
-      count: this.numberOfRows,
-      amount: this.byteSize,
-    }
-    this.emit(Event.Current, data, total)
-  }
-
-  private _emitTotalEvent() {
-    const total = {
-      count: this.numberOfRows,
-      amount: this.byteSize,
-    }
-    this.emit(Event.Total, total)
+    this.byteSize += Buffer.byteLength(line)
   }
 
   private _mapToFields(line: string): void {
     const fields = splitByComma(line, { hasDoubleQuotes: this.hasDoubleQuotes })
     const { data }: CsvRowData = { data: {} }
+
     if (this.hasHeaders) {
       if (this.headers.length !== fields.length) {
         throw new InvalidNumberOfFieldsError(this.headers.length, fields.length)
@@ -173,16 +158,16 @@ export class CsvTransformStream<T> extends Transform {
       for (const [index, field] of fields.entries()) {
         data[this.headers[index] as string] = field
       }
-      this.push({ data })
 
-      this._emitCurrentEvent({ data }, line)
+      this._updateStat(line)
+      this.push({ data, stat: { count: this.numberOfRows, amount: this.byteSize } })
     } else {
       for (const [index, field] of fields.entries()) {
         data[`${index + 1}`] = field
       }
-      this.push({ data })
 
-      this._emitCurrentEvent({ data }, line)
+      this._updateStat(line)
+      this.push({ data, stat: { count: this.numberOfRows, amount: this.byteSize } })
     }
   }
 

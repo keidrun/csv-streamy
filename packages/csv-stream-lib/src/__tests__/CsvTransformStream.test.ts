@@ -326,6 +326,22 @@ describe('CsvTransformStream', () => {
         converter.write({})
         converter.end()
       })
+      test('should throw error when the number of headers is less than the number of fileds', (done) => {
+        const converter = CsvTransformStream.asConverter({ hasHeaders: true })
+
+        converter.on('error', (error) => {
+          try {
+            expect(error).toBeInstanceOf(InvalidNumberOfFieldsError)
+            done()
+          } catch (error) {
+            done(error)
+          }
+        })
+
+        converter.write({ data: { 'header[1]': 'item[1][1]', 'header[2]': 'item[1][2]', 'header[3]': 'item[1][3]' } })
+        converter.write({ data: { 'header[1]': 'item[2][1]' } })
+        converter.end()
+      })
       test('should pass csv format stream', (done) => {
         const converter = CsvTransformStream.asConverter()
         const spy = new PassThrough()

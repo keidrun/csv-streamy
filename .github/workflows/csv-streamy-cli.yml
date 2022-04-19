@@ -33,7 +33,7 @@ jobs:
         with:
           directory: ./packages/csv-stream-cli/coverage/
           flags: csv-streamy-cli
-          fail_ci_if_error: true
+          fail_ci_if_error: false
 
   # publish-npm:
   #   needs: [test]

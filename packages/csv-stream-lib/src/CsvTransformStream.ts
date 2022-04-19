@@ -13,6 +13,8 @@ export type ConverterOptions = {
   hasDoubleQuotes?: boolean
 }
 
+export type CsvRowData = { [key: string]: string }
+
 export enum Event {
   Current = 'current',
   Total = 'total',
@@ -110,11 +112,11 @@ export class CsvTransformStream<T> extends Transform {
 
   static asConverter(
     { hasHeaders = false, hasDoubleQuotes = false }: ConverterOptions = { hasHeaders: false, hasDoubleQuotes: false },
-  ): CsvTransformStream<{ [key: string]: string }> {
-    return new CsvTransformStream<{ [key: string]: string }>({
+  ): CsvTransformStream<CsvRowData> {
+    return new CsvTransformStream<CsvRowData>({
       hasHeaders: hasHeaders,
       hasDoubleQuotes: hasDoubleQuotes,
-      transform(chunk: { [key: string]: string }, _: BufferEncoding, callback: TransformCallback): void {
+      transform(chunk: CsvRowData, _: BufferEncoding, callback: TransformCallback): void {
         try {
           this._mapToLine(chunk)
           callback()
@@ -139,7 +141,7 @@ export class CsvTransformStream<T> extends Transform {
     this.hasDoubleQuotes = options?.hasDoubleQuotes || false
   }
 
-  private _emitCurrentEvent(data: { [key: string]: string }, rawData: string) {
+  private _emitCurrentEvent(data: CsvRowData, rawData: string) {
     this.numberOfRows++
     this.byteSize += Buffer.byteLength(rawData)
     const total = {
@@ -181,7 +183,7 @@ export class CsvTransformStream<T> extends Transform {
     }
   }
 
-  private _mapToLine(row: { [key: string]: string }): void {
+  private _mapToLine(row: CsvRowData): void {
     if (this.hasHeaders && this.headers.length === 0) {
       for (const key of Object.keys(row)) {
         this.headers.push(key)

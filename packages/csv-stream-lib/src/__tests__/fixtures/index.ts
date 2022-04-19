@@ -1,6 +1,6 @@
 import type { Readable } from 'stream'
-import * as fs from 'fs'
-import * as path from 'path'
+import { createReadStream } from 'fs'
+import { resolve } from 'path'
 import { dirname } from 'dirfilename'
 
 export function readTestData(
@@ -10,7 +10,7 @@ export function readTestData(
   const encoding = options?.encoding || 'utf-8'
   const highWaterMark = options?.highWaterMark || 1 * 1024
 
-  return fs.createReadStream(path.resolve(dirname(import.meta), `${baseName}.csv`), {
+  return createReadStream(resolve(dirname(import.meta), `${baseName}.csv`), {
     encoding: encoding,
     highWaterMark: highWaterMark,
   })

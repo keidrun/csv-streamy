@@ -68,25 +68,52 @@ export function split({
     return converter
   }
 
-  let isFirstRow = true
+  const isRowsMode = !!rows && !bytesNum
+  const isBytesMode = !rows && !!bytesNum
   let writer: CsvTransformStream<CsvRowData>
-  // let prevAmount = 0
+  let isFirstRow = true
+  let prevAmount = 0
+  let total = 0
   async function processRow({ data, stat }: CsvRowData): Promise<void> {
     const { count, amount } = { ...stat }
 
+    if (!count || !amount) {
+      return Promise.resolve()
+    }
+
+    const rowSize = amount - prevAmount
+
     if (isFirstRow) {
+      if (isBytesMode) {
+        if (amount > bytesNum) {
+          return Promise.reject('The first row size of an input file is smaller than the size specified by --bytes.')
+        }
+      }
+
       writer = newWriter()
       isFirstRow = false
     }
 
-    writer.write({ data })
-
-    if (!!rows && !!count && count % rows === 0) {
-      writer.end()
-      writer = newWriter()
-    } else if (!!bytesNum && !!amount && amount % bytesNum) {
-      console.log('BYTES YES')
+    if (isRowsMode) {
+      writer.write({ data })
+      if (count % rows === 0) {
+        writer.end()
+        writer = newWriter()
+      }
     }
+
+    if (isBytesMode) {
+      if (total + rowSize > bytesNum) {
+        console.log('NEW FILE')
+        total = 0
+        writer.end()
+        writer = newWriter()
+      }
+      writer.write({ data })
+      total += rowSize
+    }
+
+    prevAmount = amount
 
     return Promise.resolve()
   }

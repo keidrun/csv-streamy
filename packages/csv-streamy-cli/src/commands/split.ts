@@ -129,8 +129,8 @@ export function split({
     console.log(chalk.green('Split an input file successfully.'))
   }
 
-  run().catch((error) => {
-    console.log(chalk.red(error))
+  run().catch((error: Error) => {
+    console.log(chalk.red(error.message))
     process.exit(1)
   })
 }

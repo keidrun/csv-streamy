@@ -130,7 +130,7 @@ export function split({
   }
 
   run().catch((error) => {
-    console.error(chalk.red(error))
+    console.log(chalk.red(error))
     process.exit(1)
   })
 }

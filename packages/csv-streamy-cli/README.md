@@ -36,11 +36,13 @@ Usage: csv split [options]
 split a csv file into pieces
 
 Options:
-  -f, --file <PATH>     a csv file path
-  -h, --headers         if an input file has headers row
-  -d, --double-quotes   if fields are enclosed in double-quotes
-  -r, --rows <NUMBER>   NUMBER rows per an output file
-  -b, --bytes <SIZE>    SIZE bytes per an output file
-  -x, --file-extension  whether to add an extension to output files
-  --help                display help for command
+  -f, --file <PATH>        a csv file path
+  -h, --headers            if an input file has headers row
+  -d, --double-quotes      if fields are enclosed in double-quotes
+  -r, --rows <NUMBER>      NUMBER rows per an output file
+  -b, --bytes <SIZE>       SIZE bytes per an output file
+  -x, --extension          whether to add an extension to each output file
+  -o, --output-dir <PATH>  an output directory path
+  -v, --verbose            print a diagnostic just before each output file is opened
+  --help                   display help for command
 ```

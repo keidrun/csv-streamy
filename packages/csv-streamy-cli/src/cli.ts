@@ -14,7 +14,7 @@ export function run(): void {
     .option('-d, --double-quotes', 'if fields are enclosed in double-quotes')
     .option('-r, --rows <NUMBER>', 'NUMBER rows per an output file')
     .option('-b, --bytes <SIZE>', 'SIZE bytes per an output file')
-    .option('-x, --file-extension', 'whether to add an extension to each output file')
+    .option('-x, --extension', 'whether to add an extension to each output file')
     .option('-o, --output-dir <PATH>', 'an output directory path')
     .option('-v, --verbose', 'print a diagnostic just before each output file is opened')
     .action(split)

@@ -50,7 +50,7 @@
   },
   "homepage": "https://github.com/keidrun/csv-streamy/tree/main/packages/csv-streamy-cli#README.md",
   "dependencies": {
-    "@csv-streamy/lib": "^1.0.2",
+    "@csv-streamy/lib": "^1.0.4",
     "chalk": "^5.0.1",
     "commander": "^9.1.0"
   }

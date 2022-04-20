@@ -1,7 +1,7 @@
-import { resolve } from 'path'
+import { resolve, basename, extname } from 'path'
 import { pipeline } from 'stream/promises'
 import { createReadStream, createWriteStream } from 'fs'
-import { createCsvParser, createCsvConverter } from '@csv-streamy/lib'
+import { createCsvParser, createCsvConverter, CsvRowData } from '@csv-streamy/lib'
 import chalk from 'chalk'
 import { toInt } from '../utils.js'
 
@@ -11,9 +11,18 @@ type SplitCommandArgs = {
   doubleQuotes?: boolean
   rows?: number
   bytes?: string
-  fileExtension?: boolean
+  extension?: boolean
   outputDir?: string
   verbose?: boolean
+}
+
+function* generateFilePath(dirPath: string, baseFilename: string, fileExtension: string) {
+  let count = 0
+
+  while (true) {
+    count++
+    yield resolve(dirPath, baseFilename + count.toString() + fileExtension)
+  }
 }
 
 export function split({
@@ -22,13 +31,15 @@ export function split({
   doubleQuotes = false,
   rows = NaN,
   bytes = '',
-  fileExtension = false,
+  extension = false,
   outputDir = '',
   verbose = false,
 }: SplitCommandArgs): void {
   const inputFilePath = resolve(file)
   const bytesNum = toInt(bytes)
   const outputDirPath = !outputDir ? resolve(process.cwd()) : resolve(outputDir)
+  const fileExtension = extension ? extname(inputFilePath) : ''
+  const baseFilename = basename(inputFilePath, fileExtension)
 
   if (!rows && !bytesNum) {
     console.log(chalk.green.yellow('--rows or --bytes option is required.'))
@@ -45,42 +56,50 @@ export function split({
     console.log(chalk.yellow('double-quotes:', doubleQuotes))
     console.log(chalk.yellow('rows:', rows))
     console.log(chalk.yellow('bytes:', bytesNum))
-    console.log(chalk.yellow('file-extension:', fileExtension))
+    console.log(chalk.yellow('extension:', extension))
     console.log(chalk.yellow('verbose:', verbose))
   }
 
-  async function processRow(row: { [key: string]: string }) {
-    for (const [header, field] of Object.entries(row)) {
-      row[header] = field.toUpperCase()
+  const genOutputFilePath = generateFilePath(outputDirPath, baseFilename, fileExtension)
+  const newWriter = () => {
+    const converter = createCsvConverter({ hasHeaders: headers, hasDoubleQuotes: doubleQuotes })
+    const writer = createWriteStream(genOutputFilePath.next().value as string)
+    converter.pipe(writer).on('end', () => writer.end())
+    return converter
+  }
+
+  let writer = newWriter()
+  // let prevAmount = 0
+  async function processRow({ data, stat }: CsvRowData): Promise<void> {
+    const { count, amount } = { ...stat }
+
+    writer.write({ data })
+
+    if (!!rows && !!count && count % rows === 0) {
+      writer.end()
+      writer = newWriter()
+    } else if (!!bytesNum && !!amount && amount % bytesNum) {
+      console.log('BYTES YES')
     }
-    return Promise.resolve(row)
+
+    return Promise.resolve()
   }
 
   async function run() {
     await pipeline(
-      createReadStream(inputFilePath, { encoding: 'utf-8' }),
-      createCsvParser({ hasHeaders: true, hasDoubleQuotes: true }),
+      createReadStream(inputFilePath),
+      createCsvParser({ hasHeaders: headers, hasDoubleQuotes: doubleQuotes }),
+
       async function* (source) {
         for await (const row of source) {
-          yield await processRow(row as { [key: string]: string })
+          yield await processRow(row as CsvRowData)
         }
       },
-      createCsvConverter({ hasHeaders: true, hasDoubleQuotes: true }),
-      createWriteStream('output.csv', { encoding: 'utf-8' }),
     )
   }
 
-  run().catch((error) => console.error(chalk.red(error)))
+  run().catch((error) => {
+    console.error(chalk.red(error))
+    process.exit(1)
+  })
 }
-
-// if (!(await fs.access(inputFilePath))) {
-//   console.log(chalk.green.yellow(`The file path specified by --file was not found. Path: '${inputFilePath}'`))
-//   process.exit(1)
-// }
-
-// if (!(await fs.access(outputDirPath))) {
-//   console.log(
-//     chalk.green.yellow(`The directory path specified by --output-dir was not found. Path: '${outputDirPath}'`),
-//   )
-//   process.exit(1)
-// }

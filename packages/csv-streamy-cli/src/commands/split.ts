@@ -81,8 +81,6 @@ export function split({
       return Promise.resolve()
     }
 
-    const rowSize = amount - prevAmount
-
     if (isFirstRow) {
       if (isBytesMode) {
         if (amount > bytesNum) {
@@ -91,20 +89,19 @@ export function split({
       }
 
       writer = newWriter()
-      isFirstRow = false
     }
 
     if (isRowsMode) {
-      writer.write({ data })
-      if (count % rows === 0) {
+      if (!isFirstRow && (count - 1) % rows === 0) {
         writer.end()
         writer = newWriter()
       }
+      writer.write({ data })
     }
 
     if (isBytesMode) {
+      const rowSize = amount - prevAmount
       if (total + rowSize > bytesNum) {
-        console.log('NEW FILE')
         total = 0
         writer.end()
         writer = newWriter()
@@ -115,6 +112,7 @@ export function split({
 
     prevAmount = amount
 
+    if (isFirstRow) isFirstRow = false
     return Promise.resolve()
   }
 
@@ -128,6 +126,7 @@ export function split({
         }
       },
     )
+    console.log(chalk.green('Split an input file successfully.'))
   }
 
   run().catch((error) => {

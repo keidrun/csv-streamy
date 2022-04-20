@@ -1,7 +1,7 @@
 import { resolve, basename, extname } from 'path'
 import { pipeline } from 'stream/promises'
 import { createReadStream, createWriteStream } from 'fs'
-import { createCsvParser, createCsvConverter, CsvRowData } from '@csv-streamy/lib'
+import { createCsvParser, createCsvConverter, CsvRowData, CsvTransformStream } from '@csv-streamy/lib'
 import chalk from 'chalk'
 import { toInt } from '../utils.js'
 
@@ -68,10 +68,16 @@ export function split({
     return converter
   }
 
-  let writer = newWriter()
+  let isFirstRow = true
+  let writer: CsvTransformStream<CsvRowData>
   // let prevAmount = 0
   async function processRow({ data, stat }: CsvRowData): Promise<void> {
     const { count, amount } = { ...stat }
+
+    if (isFirstRow) {
+      writer = newWriter()
+      isFirstRow = false
+    }
 
     writer.write({ data })
 
@@ -89,7 +95,6 @@ export function split({
     await pipeline(
       createReadStream(inputFilePath),
       createCsvParser({ hasHeaders: headers, hasDoubleQuotes: doubleQuotes }),
-
       async function* (source) {
         for await (const row of source) {
           yield await processRow(row as CsvRowData)

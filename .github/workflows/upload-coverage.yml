@@ -1,0 +1,46 @@
+name: 'Upload Coverage'
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/csv-streamy-lib/**'
+      - 'packages/csv-streamy-cli/**'
+      - '.github/workflows/upload-coverage.yml'
+  pull_request:
+    paths:
+      - 'packages/csv-streamy-lib/**'
+      - 'packages/csv-streamy-cli/**'
+
+jobs:
+  test:
+    name: Test and Upload Coverage
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [17.x]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Install packages
+        run: npm ci
+      - name: lib - Test
+        run: npm run test -w @csv-streamy/lib
+      - name: cli - Test
+        run: npm run test -w @csv-streamy/cli
+      - name: lib - Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          files: ./packages/csv-streamy-lib/coverage/coverage-final.json
+          flags: csv-streamy-lib
+          fail_ci_if_error: true
+      - name: cli - Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          files: ./packages/csv-streamy-cli/coverage/coverage-final.json
+          flags: csv-streamy-cli
+          fail_ci_if_error: true

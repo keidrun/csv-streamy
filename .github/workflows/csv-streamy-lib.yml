@@ -28,12 +28,12 @@ jobs:
         run: npm ci
       - name: Test
         run: npm run test -w @csv-streamy/lib
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
-        with:
-          files: ./packages/csv-streamy-lib/coverage/coverage-final.json
-          flags: csv-streamy-lib
-          fail_ci_if_error: false
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v2
+      #   with:
+      #     files: ./packages/csv-streamy-lib/coverage/coverage-final.json
+      #     flags: csv-streamy-lib
+      #     fail_ci_if_error: false
 
   publish-npm:
     needs: [test]

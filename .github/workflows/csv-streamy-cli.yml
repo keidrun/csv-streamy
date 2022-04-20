@@ -31,7 +31,7 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
-          directory: ./packages/csv-streamy-cli/coverage/
+          files: ./packages/csv-streamy-cli/coverage/coverage-final.json
           flags: csv-streamy-cli
           fail_ci_if_error: false
 

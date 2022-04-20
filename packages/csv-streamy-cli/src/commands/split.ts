@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { resolve, basename, extname } from 'path'
 import { pipeline } from 'stream/promises'
 import { createReadStream, createWriteStream } from 'fs'
@@ -64,7 +65,13 @@ export function split({
   const newWriter = () => {
     const converter = createCsvConverter({ hasHeaders: headers, hasDoubleQuotes: doubleQuotes })
     const writer = createWriteStream(genOutputFilePath.next().value as string)
-    converter.pipe(writer).on('end', () => writer.end())
+    converter
+      .pipe(writer)
+      .on('end', () => writer.end())
+      .on('error', (error) => {
+        console.log(chalk.red(error.message))
+        process.exit(1)
+      })
     return converter
   }
 
@@ -78,13 +85,15 @@ export function split({
     const { count, amount } = { ...stat }
 
     if (!count || !amount) {
-      return Promise.resolve()
+      return Promise.reject(new Error('Something went wrong.'))
     }
 
     if (isFirstRow) {
       if (isBytesMode) {
         if (amount > bytesNum) {
-          return Promise.reject('The first row size of an input file is smaller than the size specified by --bytes.')
+          return Promise.reject(
+            new Error('The first row size of an input file is smaller than the size specified by --bytes.'),
+          )
         }
       }
 

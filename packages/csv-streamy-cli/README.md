@@ -27,7 +27,7 @@ Commands:
   help [command]   display help for command
 ```
 
-### split a csv file into pieces
+### Split a csv file into pieces
 
 ```shell
 $ csv help split
@@ -45,4 +45,14 @@ Options:
   -o, --output-dir <PATH>  an output directory path
   -v, --verbose            print a diagnostic just before each output file is opened
   --help                   display help for command
+```
+
+### Examples
+
+```bash
+# When you want to split your csv file per 10 rows
+$ csv split -f input.csv -o out -h -d -x -r 10
+
+# When you want to split your csv file per 1K bytes except the size of headers
+$ csv split -f input.csv -o out -h -d -x -b 1K
 ```

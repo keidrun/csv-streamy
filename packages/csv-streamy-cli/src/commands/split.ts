@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { resolve, basename, extname } from 'path'
 import { pipeline } from 'stream/promises'
 import { createReadStream, createWriteStream } from 'fs'

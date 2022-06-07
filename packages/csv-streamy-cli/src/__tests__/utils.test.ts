@@ -1,6 +1,8 @@
+import { describe, test, expect } from 'vitest'
+
 import { toInt } from '../utils.js'
 
-describe('utils', () => {
+describe.concurrent('utils', () => {
   describe('toInt', () => {
     test('should return a NaN when a size is undefined', () => {
       expect(toInt(undefined)).toBe(NaN)

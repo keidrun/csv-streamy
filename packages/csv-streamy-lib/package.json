@@ -21,9 +21,8 @@
     "start": "node --loader ts-node/esm src/index.ts",
     "build-clean": "rimraf ./build",
     "build": "tsc",
-    "watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch --coverage",
-    "test-clear": "jest --clearCache",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+    "watch": "vitest watch --coverage",
+    "test": "vitest run --coverage",
     "semantic-release": "semantic-release"
   },
   "publishConfig": {

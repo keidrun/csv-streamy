@@ -1,6 +1,8 @@
+import { describe, test, expect } from 'vitest'
+
 import { splitByNewline, splitByComma } from '../utils.js'
 
-describe('utils', () => {
+describe.concurrent('utils', () => {
   describe('splitByNewline', () => {
     test('should split data by new line', () => {
       const data = `header[1],header[2],header[3],header[4],header[5]

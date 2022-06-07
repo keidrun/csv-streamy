@@ -1,6 +1,7 @@
 import { resolve, basename, extname } from 'path'
 import { pipeline } from 'stream/promises'
-import { createReadStream, createWriteStream } from 'fs'
+import { access, mkdir } from 'fs/promises'
+import { constants, createReadStream, createWriteStream } from 'fs'
 import { createCsvParser, createCsvConverter, CsvRowData, CsvTransformStream } from '@csv-streamy/lib'
 import chalk from 'chalk'
 import { toInt } from '../utils.js'
@@ -16,6 +17,15 @@ type SplitCommandArgs = {
   verbose?: boolean
 }
 
+function makeDirectoryIfDirectoryNotExists(dirPath: string) {
+  return access(dirPath, constants.R_OK | constants.W_OK).catch(() => {
+    if (dirPath) {
+      return mkdir(dirPath)
+    }
+    return Promise.resolve()
+  })
+}
+
 function* generateFilePath(dirPath: string, baseFilename: string, fileExtension: string) {
   let count = 0
 
@@ -25,7 +35,7 @@ function* generateFilePath(dirPath: string, baseFilename: string, fileExtension:
   }
 }
 
-export function split({
+export async function split({
   file,
   headers = false,
   doubleQuotes = false,
@@ -34,7 +44,7 @@ export function split({
   extension = false,
   outputDir = '',
   verbose = false,
-}: SplitCommandArgs): void {
+}: SplitCommandArgs): Promise<void> {
   const inputFilePath = resolve(file)
   const bytesNum = toInt(bytes)
   const outputDirPath = !outputDir ? resolve(process.cwd()) : resolve(outputDir)
@@ -58,6 +68,17 @@ export function split({
     console.log(chalk.yellow('bytes:', bytesNum))
     console.log(chalk.yellow('extension:', extension))
     console.log(chalk.yellow('verbose:', verbose))
+  }
+
+  try {
+    await makeDirectoryIfDirectoryNotExists(outputDir)
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(chalk.red(error.message))
+    } else {
+      console.log(chalk.red(error))
+    }
+    process.exit(1)
   }
 
   const genOutputFilePath = generateFilePath(outputDirPath, baseFilename, fileExtension)

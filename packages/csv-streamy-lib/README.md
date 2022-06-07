@@ -10,15 +10,19 @@
 npm i @csv-streamy/lib
 ```
 
-## Brief examples
+## Quick examples
 
 ### Read and Write your CSV file
 
 ```typescript
 import { resolve } from 'path'
+import { dirname } from 'dirfilename'
 import { pipeline } from 'stream/promises'
 import { createReadStream, createWriteStream } from 'fs'
 import { createCsvParser, createCsvConverter, CsvRowData } from '@csv-streamy/lib'
+
+// For ES Modules
+const __dirname = dirname(import.meta)
 
 // For example, it just converts all fields to uppercase letters.
 async function processRow({ data }: CsvRowData): Promise<CsvRowData> {
@@ -50,9 +54,13 @@ run().catch(console.error)
 
 ```typescript
 import { resolve } from 'path'
+import { dirname } from 'dirfilename'
 import { pipeline } from 'stream/promises'
 import { createReadStream, createWriteStream } from 'fs'
 import { createCsvParser, createCsvConverter, CsvRowData } from '@csv-streamy/lib'
+
+// For ES Modules
+const __dirname = dirname(import.meta)
 
 // You can observe the number of row as `count` and the bytes of data as `amount` in `stat`.
 // For example, it converts all fields to uppercase letters if `count` is even
@@ -98,8 +106,11 @@ Each object contains fields per row as `data` and statistics data as `stat`, whi
 
 ```typescript
 import { resolve } from 'path'
+import { dirname } from 'dirfilename'
 import { createReadStream } from 'fs'
 import { createCsvParser } from '@csv-streamy/lib'
+
+const __dirname = dirname(import.meta)
 
 const reader = createReadStream(resolve(__dirname, 'input.csv'))
 const parser = createCsvParser({ hasHeaders: true, hasDoubleQuotes: true })
@@ -176,8 +187,11 @@ Of course, you can export them to a file.
 
 ```typescript
 import { resolve } from 'path'
+import { dirname } from 'dirfilename'
 import { createWriteStream } from 'fs'
 import { createCsvConverter } from '@csv-streamy/lib'
+
+const __dirname = dirname(import.meta)
 
 const converter = createCsvConverter({ hasHeaders: true, hasDoubleQuotes: true })
 const writer = createWriteStream(resolve(__dirname, 'output.csv'))
@@ -192,7 +206,7 @@ converter.end()
 
 ## Acceptable CSV format
 
-This basically follows [RFC4180](https://datatracker.ietf.org/doc/html/rfc4180) but additionally needs to satisfly the following rules to make a common csv file easier to use:
+This basically follows [RFC4180](https://datatracker.ietf.org/doc/html/rfc4180) but additionally needs to meet the following rules to make a common csv file easier to use:
 
 - Fields must be Comma-Separated Values. (NOT Tab-Separated.)
 - Fields can be enclosed in double-quotes to contain line breaks, double quotes and commas. (BUT a file cannot mix enclosed fields and not-enclosed fields.)

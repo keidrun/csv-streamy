@@ -23,8 +23,7 @@
   "scripts": {
     "start": "node --loader ts-node/esm src/bin/index.ts",
     "start-bin": "node build/bin/index.js",
-    "build-clean": "rimraf ./build",
-    "build": "tsc",
+    "build": "rimraf ./build && tsc",
     "watch": "vitest watch --coverage",
     "test": "vitest run --coverage",
     "semantic-release": "semantic-release"
@@ -49,8 +48,8 @@
   },
   "homepage": "https://github.com/keidrun/csv-streamy/tree/main/packages/csv-streamy-cli#README.md",
   "dependencies": {
-    "@csv-streamy/lib": "^1.0.4",
+    "@csv-streamy/lib": "^1.0.5",
     "chalk": "^5.0.1",
-    "commander": "^9.1.0"
+    "commander": "^9.3.0"
   }
 }

@@ -16,13 +16,9 @@ npm i @csv-streamy/lib
 
 ```typescript
 import { resolve } from 'path'
-import { dirname } from 'dirfilename'
 import { pipeline } from 'stream/promises'
 import { createReadStream, createWriteStream } from 'fs'
 import { createCsvParser, createCsvConverter, CsvRowData } from '@csv-streamy/lib'
-
-// For ES Modules
-const __dirname = dirname(import.meta)
 
 // For example, it just converts all fields to uppercase letters.
 async function processRow({ data }: CsvRowData): Promise<CsvRowData> {
@@ -54,13 +50,9 @@ run().catch(console.error)
 
 ```typescript
 import { resolve } from 'path'
-import { dirname } from 'dirfilename'
 import { pipeline } from 'stream/promises'
 import { createReadStream, createWriteStream } from 'fs'
 import { createCsvParser, createCsvConverter, CsvRowData } from '@csv-streamy/lib'
-
-// For ES Modules
-const __dirname = dirname(import.meta)
 
 // You can observe the number of row as `count` and the bytes of data as `amount` in `stat`.
 // For example, it converts all fields to uppercase letters if `count` is even
@@ -97,6 +89,80 @@ async function run() {
 run().catch(console.error)
 ```
 
+### Using ES Modules (ESM)
+
+If you want to use [ES Modules](https://nodejs.org/api/esm.html#modules-ecmascript-modules), you can do it as follows.
+
+```typescript
+import { resolve } from 'path'
+import { dirname } from 'dirfilename'
+import { pipeline } from 'stream/promises'
+import { createReadStream, createWriteStream } from 'fs'
+import { createCsvParser, createCsvConverter, CsvRowData } from '@csv-streamy/lib'
+
+// Workaround to simply use `__dirname` because CommonJS variables are not available in ES modules.
+const __dirname = dirname(import.meta)
+
+async function processRow({ data }: CsvRowData): Promise<CsvRowData> {
+  for (const [header, field] of Object.entries(data)) {
+    data[header] = field.toUpperCase()
+  }
+  return Promise.resolve({ data })
+}
+
+async function run() {
+  await pipeline(
+    createReadStream(resolve(__dirname, 'input.csv'), { encoding: 'utf-8' }),
+    createCsvParser({ hasHeaders: true, hasDoubleQuotes: true }),
+    async function* (source) {
+      for await (const row of source) {
+        yield await processRow(row as CsvRowData)
+      }
+    },
+    createCsvConverter({ hasHeaders: true, hasDoubleQuotes: true }),
+    createWriteStream(resolve(__dirname, 'output.csv'), { encoding: 'utf-8' }),
+  )
+  console.log('Woo-hoo! Succeeded!!')
+}
+
+run().catch(console.error)
+```
+
+### Using CommonJS
+
+If you want to use [CommonJS](https://nodejs.org/api/modules.html#modules-commonjs-modules) in just Node.js, you can do it as follows.
+
+```typescript
+const { resolve } = require('path')
+const { pipeline } = require('stream/promises')
+const { createReadStream, createWriteStream } = require('fs')
+const { createCsvParser, createCsvConverter } = require('@csv-streamy/lib')
+
+async function processRow({ data }) {
+  for (const [header, field] of Object.entries(data)) {
+    data[header] = field.toUpperCase()
+  }
+  return Promise.resolve({ data })
+}
+
+async function run() {
+  await pipeline(
+    createReadStream(resolve(__dirname, 'input.csv'), { encoding: 'utf-8' }),
+    createCsvParser({ hasHeaders: true, hasDoubleQuotes: true }),
+    async function* (source) {
+      for await (const row of source) {
+        yield await processRow(row)
+      }
+    },
+    createCsvConverter({ hasHeaders: true, hasDoubleQuotes: true }),
+    createWriteStream(resolve(__dirname, 'output.csv'), { encoding: 'utf-8' })
+  );
+  console.log('Woo-hoo! Succeeded!!')
+}
+
+run().catch(console.error)
+```
+
 ## Usage
 
 ### Parsing
@@ -109,8 +175,6 @@ import { resolve } from 'path'
 import { dirname } from 'dirfilename'
 import { createReadStream } from 'fs'
 import { createCsvParser } from '@csv-streamy/lib'
-
-const __dirname = dirname(import.meta)
 
 const reader = createReadStream(resolve(__dirname, 'input.csv'))
 const parser = createCsvParser({ hasHeaders: true, hasDoubleQuotes: true })
@@ -190,8 +254,6 @@ import { resolve } from 'path'
 import { dirname } from 'dirfilename'
 import { createWriteStream } from 'fs'
 import { createCsvConverter } from '@csv-streamy/lib'
-
-const __dirname = dirname(import.meta)
 
 const converter = createCsvConverter({ hasHeaders: true, hasDoubleQuotes: true })
 const writer = createWriteStream(resolve(__dirname, 'output.csv'))

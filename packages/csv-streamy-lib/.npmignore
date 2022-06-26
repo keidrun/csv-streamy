@@ -18,3 +18,4 @@ jest.config.js
 jest.config.cjs
 tsconfig.json
 tsconfig.tsbuildinfo
+tsup.config.ts

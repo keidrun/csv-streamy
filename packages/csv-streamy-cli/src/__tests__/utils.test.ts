@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest'
 
-import { toInt } from '../utils.js'
+import { toInt, version } from '../utils.js'
 
 describe.concurrent('utils', () => {
   describe('toInt', () => {
@@ -45,6 +45,11 @@ describe.concurrent('utils', () => {
     })
     test('should return  a number * Y unit', () => {
       expect(toInt('8Y')).toBe(8 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024 * 1024)
+    })
+  })
+  describe('version', () => {
+    test('should return value from package.json', () => {
+      expect(version()).not.toBeNull()
     })
   })
 })

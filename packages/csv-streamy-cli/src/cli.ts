@@ -1,10 +1,9 @@
 import { program } from 'commander'
 import { split } from './commands/split.js'
-
-const VERSION = '1.0.0'
+import { version } from './utils.js'
 
 export function run(): void {
-  program.name('csv').description('Command line tool to handle a csv file.').version(VERSION)
+  program.name('csv').description('Command line tool to handle a csv file.').version(version())
 
   program
     .command('split')

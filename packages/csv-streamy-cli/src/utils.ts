@@ -1,3 +1,14 @@
+import { createRequire } from 'node:module'
+const require = createRequire(import.meta.url)
+
+type PackageJson = {
+  version: string
+}
+
+// Workaround to load JSON because JSON modules is experimental in Node.js v16.
+// https://nodejs.org/docs/latest-v16.x/api/esm.html#json-modules
+const packageJson = require('../package.json') as PackageJson
+
 const SIZE_UNIT: {
   [key: string]: number
 } = {
@@ -26,4 +37,8 @@ export function toInt(size?: string): number {
   }
 
   return num * Number(SIZE_UNIT[unitKey])
+}
+
+export function version(): string {
+  return packageJson.version
 }

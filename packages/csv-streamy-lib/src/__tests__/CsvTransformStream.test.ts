@@ -2,7 +2,7 @@ import { describe, test, expect } from 'vitest'
 import { PassThrough } from 'stream'
 
 import { readTestData } from './fixtures/index.js'
-import { CsvTransformStream } from '../CsvTransformStream.js'
+import { CsvTransformStream, CsvRowData } from '../CsvTransformStream.js'
 import { InvalidNumberOfFieldsError } from '../errors/InvalidNumberOfFieldsError.js'
 import { InvalidCsvFormatError } from '../errors/InvalidCsvFormatError.js'
 import { UndefinedDataError } from '../errors/UndefinedDataError.js'
@@ -31,10 +31,10 @@ describe('CsvTransformStream', () => {
           const reader = readTestData('1_001')
           const parser = CsvTransformStream.asParser()
 
-          const result = []
+          const result: CsvRowData[] = []
           reader
             .pipe(parser)
-            .on('data', (data) => {
+            .on('data', (data: CsvRowData) => {
               result.push(data)
             })
             .on('close', () => {
@@ -51,10 +51,10 @@ describe('CsvTransformStream', () => {
           const reader = readTestData('1_002')
           const parser = CsvTransformStream.asParser()
 
-          const result = []
+          const result: CsvRowData[] = []
           reader
             .pipe(parser)
-            .on('data', (data) => {
+            .on('data', (data: CsvRowData) => {
               result.push(data)
             })
             .on('close', () => {
@@ -71,10 +71,10 @@ describe('CsvTransformStream', () => {
           const reader = readTestData('1_003')
           const parser = CsvTransformStream.asParser()
 
-          const result = []
+          const result: CsvRowData[] = []
           reader
             .pipe(parser)
-            .on('data', (data) => {
+            .on('data', (data: CsvRowData) => {
               result.push(data)
             })
             .on('close', () => {
@@ -93,10 +93,10 @@ describe('CsvTransformStream', () => {
           const reader = readTestData('2_001')
           const parser = CsvTransformStream.asParser({ hasHeaders: true })
 
-          const result = []
+          const result: CsvRowData[] = []
           reader
             .pipe(parser)
-            .on('data', (data) => {
+            .on('data', (data: CsvRowData) => {
               result.push(data)
             })
             .on('close', () => {
@@ -113,10 +113,10 @@ describe('CsvTransformStream', () => {
           const reader = readTestData('2_002')
           const parser = CsvTransformStream.asParser({ hasHeaders: true })
 
-          const result = []
+          const result: CsvRowData[] = []
           reader
             .pipe(parser)
-            .on('data', (data) => {
+            .on('data', (data: CsvRowData) => {
               result.push(data)
             })
             .on('close', () => {
@@ -133,10 +133,10 @@ describe('CsvTransformStream', () => {
           const reader = readTestData('2_003')
           const parser = CsvTransformStream.asParser({ hasHeaders: true })
 
-          const result = []
+          const result: CsvRowData[] = []
           reader
             .pipe(parser)
-            .on('data', (data) => {
+            .on('data', (data: CsvRowData) => {
               result.push(data)
             })
             .on('close', () => {
@@ -183,10 +183,10 @@ describe('CsvTransformStream', () => {
           const reader = readTestData('3_001')
           const parser = CsvTransformStream.asParser({ hasDoubleQuotes: true })
 
-          const result = []
+          const result: CsvRowData[] = []
           reader
             .pipe(parser)
-            .on('data', (data) => {
+            .on('data', (data: CsvRowData) => {
               result.push(data)
             })
             .on('close', () => {
@@ -203,10 +203,10 @@ describe('CsvTransformStream', () => {
           const reader = readTestData('3_002')
           const parser = CsvTransformStream.asParser({ hasDoubleQuotes: true })
 
-          const result = []
+          const result: CsvRowData[] = []
           reader
             .pipe(parser)
-            .on('data', (data) => {
+            .on('data', (data: CsvRowData) => {
               result.push(data)
             })
             .on('close', () => {
@@ -225,10 +225,10 @@ describe('CsvTransformStream', () => {
           const reader = readTestData('4_001')
           const parser = CsvTransformStream.asParser({ hasHeaders: true, hasDoubleQuotes: true })
 
-          const result = []
+          const result: CsvRowData[] = []
           reader
             .pipe(parser)
-            .on('data', (data) => {
+            .on('data', (data: CsvRowData) => {
               result.push(data)
             })
             .on('close', () => {
@@ -245,10 +245,10 @@ describe('CsvTransformStream', () => {
           const reader = readTestData('4_002')
           const parser = CsvTransformStream.asParser({ hasHeaders: true, hasDoubleQuotes: true })
 
-          const result = []
+          const result: CsvRowData[] = []
           reader
             .pipe(parser)
-            .on('data', (data) => {
+            .on('data', (data: CsvRowData) => {
               result.push(data)
             })
             .on('close', () => {
@@ -265,10 +265,10 @@ describe('CsvTransformStream', () => {
           const reader = readTestData('4_003')
           const parser = CsvTransformStream.asParser({ hasHeaders: true, hasDoubleQuotes: true })
 
-          const result = []
+          const result: CsvRowData[] = []
           reader
             .pipe(parser)
-            .on('data', (data) => {
+            .on('data', (data: CsvRowData) => {
               result.push(data)
             })
             .on('close', () => {

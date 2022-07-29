@@ -10,7 +10,7 @@ export function readTestData(
   const encoding = options?.encoding || 'utf-8'
   const highWaterMark = options?.highWaterMark || 1 * 1024
 
-  return createReadStream(resolve(dirname(import.meta), `${baseName}.csv`), {
+  return createReadStream(resolve(dirname(import.meta.url), `${baseName}.csv`), {
     encoding: encoding,
     highWaterMark: highWaterMark,
   })

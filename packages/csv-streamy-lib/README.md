@@ -101,7 +101,7 @@ import { createReadStream, createWriteStream } from 'fs'
 import { createCsvParser, createCsvConverter, CsvRowData } from '@csv-streamy/lib'
 
 // Workaround to simply use `__dirname` because CommonJS variables are not available in ES modules.
-const __dirname = dirname(import.meta)
+const __dirname = dirname(import.meta.url)
 
 async function processRow({ data }: CsvRowData): Promise<CsvRowData> {
   for (const [header, field] of Object.entries(data)) {
@@ -172,7 +172,6 @@ Each object contains fields per row as `data` and statistics data as `stat`, whi
 
 ```typescript
 import { resolve } from 'path'
-import { dirname } from 'dirfilename'
 import { createReadStream } from 'fs'
 import { createCsvParser } from '@csv-streamy/lib'
 
@@ -251,7 +250,6 @@ Of course, you can export them to a file.
 
 ```typescript
 import { resolve } from 'path'
-import { dirname } from 'dirfilename'
 import { createWriteStream } from 'fs'
 import { createCsvConverter } from '@csv-streamy/lib'
 
